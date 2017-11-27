@@ -96,3 +96,4 @@ ENV/
 .ropeproject
 
 /fasttext_bin/
+/experiment/category_1_cnn/labs/
