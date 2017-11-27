@@ -1,12 +1,12 @@
 from os.path import dirname, join
 from languageflow.flow import Flow
 from languageflow.model import Model
+from languageflow.model.sgd import SGDClassifier
 from languageflow.transformer.tfidf import TfidfVectorizer
 from languageflow.validation.validation import TrainTestSplitValidation
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 from load_data import load_dataset
-from sklearn.linear_model import SGDClassifier
 
 if __name__ == '__main__':
     data_file = join(dirname(dirname(dirname(__file__))), "data", "fb_bank_sentiment", "corpus", "train.xlsx")
