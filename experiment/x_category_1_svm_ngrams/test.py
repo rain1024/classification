@@ -1,86 +1,23 @@
-from os.path import join, dirname
-import pandas as pd
-import json
-from underthesea.util.file_io import write
-from load_data import load_dataset
+from unittest import TestCase
 
-from model import classify
-
-data_file = join(dirname(dirname(dirname(__file__))), "data", "fb_bank_category",
-                 "corpus", "test.xlsx")
-X_test, y_test = load_dataset(data_file)
-y_test = [tuple(item) for item in y_test]
-y_pred = classify(X_test)
+from experiment.x_category_1_svm_ngrams.model import classify
 
 
-def accuracy_score(TP, FP, TN, FN):
-    return round((TP + TN) / (TP + FP + TN + FN), 2)
+class TestCategory(TestCase):
+    def test_category(self):
+        text = "Mở tài khoản ATM thì có đc quà ko ad"
+        actual = classify(text)
+        expected = "ACCOUNT"
+        self.assertEquals(expected, actual[0])
 
+    def test_category_2(self):
+        text = "Cần tư vấn mà add k rep "
+        actual = classify(text)
+        expected = "CUSTOMER SUPPORT"
+        self.assertEquals(expected, actual[0])
 
-def precision_score(TP, FP, TN, FN):
-    try:
-        return round(TP / (TP + FP), 2)
-    except:
-        return 0
-
-
-def recall_score(TP, FP, TN, FN):
-    try:
-        return round(TP / (TP + FN), 2)
-    except:
-        return 0
-
-
-def f1_score(TP, FP, TN, FN):
-    p = precision_score(TP, FP, TN, FN)
-    r = recall_score(TP, FP, TN, FN)
-    try:
-        f1 = round((2 * p * r) / (p + r), 2)
-    except:
-        f1 = 0
-    return f1
-
-
-# generate score
-labels = set(sum(y_test + y_pred, ()))
-score = {}
-for label in labels:
-    score[label] = {}
-    TP, FP, TN, FN = (0, 0, 0, 0)
-
-    for i in range(len(y_test)):
-        if label in y_test[i]:
-            if label in y_pred[i]:
-                TP += 1
-            else:
-                FN += 1
-        else:
-            if label in y_pred[i]:
-                FP += 1
-            else:
-                TN += 1
-    score[label] = {
-        "TP": TP,
-        "FP": FP,
-        "TN": TN,
-        "FN": FN,
-        "accuracy": accuracy_score(TP, FP, TN, FN),
-        "precision": precision_score(TP, FP, TN, FN),
-        "recall": recall_score(TP, FP, TN, FN),
-        "f1": f1_score(TP, FP, TN, FN),
-    }
-
-df = pd.DataFrame.from_dict(score)
-df.T.to_excel("inspect/score.xlsx", columns=["TP", "TN", "FP", "FN", "accuracy", "precision", "recall", "f1"])
-
-# generate result
-result = {
-    "X_test": X_test,
-    "y_test": y_test,
-    "y_pred": y_pred,
-    "score": score
-}
-
-print(score)
-content = json.dumps(result, ensure_ascii=False)
-write("inspect/result.json", content)
+    def test_category_3(self):
+        text = "Mình đã đăng nhập thành công. Nhưng ko sử dụng đc các dich vụ. Kể cả xe số dư hay chuyển tiền "
+        actual = classify(text)
+        expected = ("INTERNET BANKING", "MONEY TRANSFER")
+        self.assertEquals(expected, actual)

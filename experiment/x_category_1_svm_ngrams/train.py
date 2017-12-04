@@ -13,8 +13,8 @@ from sklearn.linear_model import SGDClassifier
 if __name__ == '__main__':
     data_file = join(dirname(dirname(dirname(__file__))), "data", "fb_bank_category", "corpus", "train.xlsx")
     X, y = load_dataset(data_file)
-    n = 10
-    X, y = X[:n], y[:n]
+    # n = 10
+    # X, y = X[:n], y[:n]
     flow = Flow()
     flow.log_folder = "log"
 

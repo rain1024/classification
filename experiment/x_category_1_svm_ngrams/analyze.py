@@ -1,19 +1,16 @@
 from os.path import join, dirname
 import pandas as pd
-from sklearn.preprocessing import MultiLabelBinarizer
 import json
-
 from underthesea.util.file_io import write
-
 from load_data import load_dataset
-from model.model import predict
-from sklearn.metrics import confusion_matrix
 
-data_file = join(dirname(dirname(dirname(__file__))), "data", "fb_bank_act_2",
+from model import classify
+
+data_file = join(dirname(dirname(dirname(__file__))), "data", "fb_bank_category",
                  "corpus", "test.xlsx")
 X_test, y_test = load_dataset(data_file)
 y_test = [tuple(item) for item in y_test]
-y_pred = predict(X_test)
+y_pred = classify(X_test)
 
 
 def accuracy_score(TP, FP, TN, FN):
@@ -84,5 +81,6 @@ result = {
     "score": score
 }
 
+print(score)
 content = json.dumps(result, ensure_ascii=False)
 write("inspect/result.json", content)
