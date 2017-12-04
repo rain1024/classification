@@ -23,5 +23,8 @@ $ pip install git+https://github.com/magizbox/underthesea.flow
 
 # Related Works
 
-* Detail Reports, [link](https://docs.google.com/spreadsheets/d/1PUnNBVywHbG4fpqSzBAV6jPWFNOKaiIQEKWM-W2mxiE/edit?usp=sharing)
 * Vietnamese Text Classification publications, [link](https://github.com/magizbox/underthesea/wiki/Vietnamese-NLP-Publications#text-classification)
+
+# Results
+
+SVM (ngrams) : 0.55 (F1 Weighted)
